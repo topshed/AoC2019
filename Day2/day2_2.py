@@ -49,10 +49,7 @@ for noun in range(100):
         output =  opcodes[0]
         #print(noun, verb, output)
         if  output == '19690720':
-            #break
+
             print(noun,verb)
 print('done')
 
-#25220290
-19690720
-19690720
