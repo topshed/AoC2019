@@ -1,0 +1,15 @@
+#/Library/Frameworks/Python.framework/Versions/3.7/bin/ipython3
+# GMT Fri Dec  6 09:19:37 2019
+# 
+COM B
+B C G
+C D
+D E I
+E F J
+F
+G H
+H
+I
+J K
+K L
+L
