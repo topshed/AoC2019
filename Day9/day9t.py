@@ -1,4 +1,4 @@
-opcodes = []
+opcodes = [0] *10000
 incodes = []
 def multiply(a,b,c):
     global opcodes
@@ -16,36 +16,27 @@ def add(a,b,c):
     
 def save_input(a,c):
     global opcodes
+    print("saving to address ",c)
     opcodes[c] = a
 
 
+#with open("input.txt") as file:
 with open("input.txt") as file:
-#with open("test1.txt") as file:
     for line in file:
         incodes= line.rstrip().split(",")
+        op_index = 0
         for c in incodes:
-            opcodes.append(int(c))
+            opcodes[op_index] = int(c)
+            op_index+=1
 
-#print(opcodes)
-#opcodes = [3,0,4,0,99]
-#opcodes = [1002,4,3,4,33]
-#opcodes = [1101,100,-1,4,0]
-#opcodes = [1,0,0,0,99]
-#opcodes = [2,3,0,3,99]
-#opcodes = [1,1,1,4,99,5,6,0,99] 
-#opcodes = [3,9,8,9,10,9,4,9,99,-1,8] # 1 if =8
-#opcodes = [3,3,1108,-1,8,3,4,3,99] # 1 if =8
-#opcodes = [3,3,1107,-1,8,3,4,3,99] # 1 if < 8
-#opcodes = [3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9] #1 if > 0
-#opcodes = [3,3,1105,-1,9,1101,0,0,12,4,12,99,1] # 1 if > 0
-#opcodes = [3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99]
 
 index = 0
+relative_base = 0
 while index < len(opcodes):
-    print(opcodes)
+    #print(opcodes)
     #print(index)
     i = opcodes[index]
-    print("opcode is: " + str(i) + ", index : " + str(index))
+    print("opcode is: " + str(i) + ", index : " + str(index) + " rel base: " + str(relative_base))
     if len(str(i)) > 1 and i != 99:
         i_pad = str(i).zfill(5)
         i = int(i_pad[-2:])
@@ -56,16 +47,26 @@ while index < len(opcodes):
             par1 = opcodes[opcodes[index+1]]
         elif par1_mode == 1:
             par1 = opcodes[index+1]
-        if i != 4 and i != 3:
+        elif par1_mode == 2: # relative mode
+            if i != 3 and i !=2:
+                par1 = opcodes[opcodes[index+1] + relative_base]
+            else:
+            
+                par1 = opcodes[index+1] + relative_base
+        if i != 4 and i != 3 and i !=9:
             if par2_mode == 0:
                 par2 = opcodes[opcodes[index+2]]
             elif par2_mode == 1:
                 par2 = opcodes[index+2]
-            if i != 5 and i != 6:
+            elif par2_mode == 2:
+                par2 = opcodes[opcodes[index+2] + relative_base]
+            if i != 5 and i != 6 and i !=9:
                 if par3_mode == 0:
                     par3 = opcodes[index+3]
                 elif par3_mode == 1:
                     par3 = opcodes[index+3]
+                elif par3_mode == 2:
+                    par3 = opcodes[opcodes[index+3] + relative_base]
 
     #print(index, opcodes)
         if i == 2:
@@ -116,7 +117,10 @@ while index < len(opcodes):
                 save_input(1,par3)
             else:
                 save_input(0,par3)
-            index+=4   
+            index+=4
+        elif i == 9:
+            relative_base = relative_base + par1
+            index+=2
         else:
             print('meh')
             index+=1
@@ -155,6 +159,7 @@ while index < len(opcodes):
             print("output")
             par1 = opcodes[index+1]
             out_value = opcodes[par1]
+            #out_value = par1
             print(out_value)
             if out_value != 0:
                 print("************************")
@@ -191,7 +196,10 @@ while index < len(opcodes):
                 save_input(1,par3)
             else:
                 save_input(0,par3)
-            index+=4   
+            index+=4
+        elif i == 9:
+            relative_base = relative_base + opcodes[opcodes[index+1]]
+            index+=2
         else:
             print('meh!')
             index+=1

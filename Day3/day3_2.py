@@ -2,8 +2,9 @@ from shapely.geometry import LineString
 from scipy.spatial import distance
 from pprint import pprint
 
-with open("input.txt") as file:
+#with open("input.txt") as file:
 #with open("test3.txt") as file:
+with open("jas.txt") as file:
     line1 = file.readline()
     line2 = file.readline()
 
